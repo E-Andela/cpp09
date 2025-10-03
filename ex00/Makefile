@@ -2,7 +2,7 @@ CC = c++
 
 FLAGS = -Wall -Wextra -Werror
 
-TARGET = bitcoin_exchange
+TARGET = btc
 SRC_DIR = src
 SRC = $(SRC_DIR)/BitcoinExchange.cpp \
 	$(SRC_DIR)/main.cpp
