@@ -86,6 +86,58 @@ void mergeInsertionSort(std::vector<int> &c, int iteration)
 	std::cout << std::endl;
 }
 
+void insertAtIndex(const std::vector<int> &src, std::vector<int> &dest, size_t stepSize, int destIndex, int srcIndex)
+{
+	int start = static_cast<int>(srcIndex * stepSize + (stepSize - 1));
+	int end = static_cast<int>(stepSize * srcIndex);
+	for (int i = start; i >= end; --i)
+	{
+		dest.insert(dest.begin() + destIndex * stepSize, src[i]);
+	}
+}
+
+std::vector<int> calculateInsertionOrder(int inserts)
+{
+	std::vector<int> order;
+	order.reserve(inserts);
+	
+	int j_prev = 1;
+	int j_curr = 3;
+
+	order.push_back(1);
+
+	while ((int)order.size() < inserts)
+	{
+		if (j_curr < inserts)
+			order.push_back(j_curr);
+		int i;
+		if (j_curr >= inserts)
+			i = inserts;
+		else
+			i = j_curr - 1;
+
+		while (i > j_prev)
+		{
+			order.push_back(i);
+			--i;
+		}
+
+		int j_next = j_prev * 2 + j_curr;
+		j_prev = j_curr;
+		j_curr = j_next;
+	}
+	return order;
+}
+
+int binarySearch(std::vector<int> &main, int target, int last, int stepsize)
+{
+	bool found = false;
+	while (!found)
+	{
+
+	}
+}
+
 void insertion(std::vector<int> &c, size_t stepSize)
 {
 	if (c.size() < 0)
@@ -97,13 +149,9 @@ void insertion(std::vector<int> &c, size_t stepSize)
 	std::cout << inserts << " numbers to insert" << std::endl;
 
 	std::vector<int> main;
-	std::vector<int> indices;
+	std::vector<int> insertOrder = calculateInsertionOrder(inserts);
 
-	//swap index 0 and 1 for free
-	// for (size_t i = 0; i < stepSize ; i++)
-	// {
-	// 	std::swap(c[i], c[i + stepSize]);
-	// // }
+	
 	
 	// for (size_t i = 0; i < c.size(); i++)
 	// {
@@ -112,13 +160,45 @@ void insertion(std::vector<int> &c, size_t stepSize)
 
 	std::cout << "main: " ;
 
-	for (size_t i = 0; i < c.size(); i += stepSize)
+	for (size_t i = 0; i < c.size(); i += stepSize * 2)
 	{
-		main.push_back(c[i]);
-		std::cout << c[i] << " ";
+		for (size_t j = 0; j < stepSize; j++)
+		{	
+			main.push_back(c[i + j]);
+			std::cout << c[i + j] << " ";
+		}
 	}
-	
 	std::cout << std::endl;
+	
+	// swap index 0 and 1 for free
+	for (size_t i = (stepSize * 2) - 1; i >= stepSize ; i--)
+	{
+		std::cout << "i: " << i << std::endl;
+		// std::swap(c[i], c[i + stepSize]);
+		main.insert(main.begin(), c[i]);
+	}
+
+	for (int i = 1; i <= inserts; i++)
+	{
+		int destIndex;
+		int srcIndex = insertOrder[i];
+		if (i = 1)
+		{
+			destIndex = 0;
+		}
+		else
+		{
+			destIndex = 
+		}
+		insertAtIndex(c, main, stepSize, destIndex, srcIndex);
+	}
+
+	std::cout << "main after swap: " ;
+	for (size_t i = 0; i < main.size(); i++)
+	{
+		std::cout << main[i] << " " ;
+	}
+
 	std::cout << std::endl;
 
 }
@@ -183,40 +263,49 @@ void mergeInsertionSort2(std::vector<int> &c, int iteration)
 	insertion(c, stepSize);
 }
 
-int main(int argc, char **argv)
+// int main(int argc, char **argv)
+// {
+// 	std::vector<int> c;
+// 	std::vector<int> c2;
+
+// 	try
+// 	{
+// 		if (argc >= 2)
+// 		{
+// 			for (int i = 1; i < argc; i++)
+// 			{
+// 				c.push_back(std::stoi(argv[i]));
+// 			}
+// 		}
+// 	}
+// 	catch(const std::exception& e)
+// 	{
+// 		std::cerr << e.what() << '\n';
+// 		return (1);
+// 	}
+// 	for (size_t i = 0; i < c.size(); i++)
+// 	{
+// 		std::cout << c[i] << " ";
+// 	}
+// 	std::cout << std::endl;
+
+// 	c2 = c;
+// 	auto start = std::chrono::high_resolution_clock::now();
+// 	// mergeInsertionSort(c, 1);
+// 	// std::cout << std::endl;
+// 	mergeInsertionSort2(c2, 1);
+
+// 	auto end = std::chrono::high_resolution_clock::now();
+// 	std::chrono::duration<double, std::milli> duration = end - start;
+// 	std::cout << "Sorting took " << duration.count() << " milliseconds." << std::endl;
+// }
+
+int main()
 {
-	std::vector<int> c;
-	std::vector<int> c2;
-
-	try
+	std::vector<int> order = insertOrder(15);
+	for (size_t i = 0; i < order.size(); ++i)
 	{
-		if (argc >= 2)
-		{
-			for (int i = 1; i < argc; i++)
-			{
-				c.push_back(std::stoi(argv[i]));
-			}
-		}
-	}
-	catch(const std::exception& e)
-	{
-		std::cerr << e.what() << '\n';
-		return (1);
-	}
-	for (size_t i = 0; i < c.size(); i++)
-	{
-		std::cout << c[i] << " ";
+		std::cout << order[i] << " " ;
 	}
 	std::cout << std::endl;
-
-	c2 = c;
-	auto start = std::chrono::high_resolution_clock::now();
-	mergeInsertionSort(c, 1);
-	std::cout << std::endl;
-	mergeInsertionSort2(c2, 1);
-
-	auto end = std::chrono::high_resolution_clock::now();
-	std::chrono::duration<double, std::milli> duration = end - start;
-	std::cout << "Sorting took " << duration.count() << " milliseconds." << std::endl;
-
 }
