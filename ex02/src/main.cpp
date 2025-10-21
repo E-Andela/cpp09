@@ -129,13 +129,23 @@ std::vector<int> calculateInsertionOrder(int inserts)
 	return order;
 }
 
-int binarySearch(std::vector<int> &main, int target, int last, int stepsize)
+int binarySearch(std::vector<int> &main, int target, int start, int last, int stepsize)
 {
-	bool found = false;
-	while (!found)
+	std::cout << "Binary search for " << target << " between " << start << " and " << last << std::endl;
+	int res = 0;
+	if (last - start <= 1)
+		return start;
+	int mid = start + ((last - start) / 2) * stepsize;
+	std::cout << "Comparing with " << main[mid] << " at index " << mid << std::endl;
+	if (target > main[mid])
 	{
-
+		res = binarySearch(main, target, mid / stepsize, last, stepsize);
 	}
+	else 
+	{
+		res = binarySearch(main, target, start, mid / stepsize, stepsize);
+	}
+	return res;
 }
 
 void insertion(std::vector<int> &c, size_t stepSize)
@@ -182,13 +192,13 @@ void insertion(std::vector<int> &c, size_t stepSize)
 	{
 		int destIndex;
 		int srcIndex = insertOrder[i];
-		if (i = 1)
+		if (i == 1)
 		{
 			destIndex = 0;
 		}
 		else
 		{
-			destIndex = 
+			destIndex = binarySearch(main, c[srcIndex], 0, srcIndex, stepSize);
 		}
 		insertAtIndex(c, main, stepSize, destIndex, srcIndex);
 	}
@@ -302,10 +312,12 @@ void mergeInsertionSort2(std::vector<int> &c, int iteration)
 
 int main()
 {
-	std::vector<int> order = insertOrder(15);
-	for (size_t i = 0; i < order.size(); ++i)
+	std::vector<int> c = {2, 4, 6, 8, 10, 12};
+	for (size_t i = 0; i < c.size(); ++i)
 	{
-		std::cout << order[i] << " " ;
+		std::cout << c[i] << " " ;
 	}
 	std::cout << std::endl;
+
+	std::cout << "binary search index: " << binarySearch(c, 7, 0, 2, 2) << std::endl;
 }
