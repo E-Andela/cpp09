@@ -270,54 +270,26 @@ void mergeInsertionSort2(std::vector<int> &c, int iteration)
 	if (amountOfPairs > 1)
 		mergeInsertionSort2(c, iteration + 1);
 
-	insertion(c, stepSize);
+	// insertion(c, stepSize);
 }
-
-// int main(int argc, char **argv)
-// {
-// 	std::vector<int> c;
-// 	std::vector<int> c2;
-
-// 	try
-// 	{
-// 		if (argc >= 2)
-// 		{
-// 			for (int i = 1; i < argc; i++)
-// 			{
-// 				c.push_back(std::stoi(argv[i]));
-// 			}
-// 		}
-// 	}
-// 	catch(const std::exception& e)
-// 	{
-// 		std::cerr << e.what() << '\n';
-// 		return (1);
-// 	}
-// 	for (size_t i = 0; i < c.size(); i++)
-// 	{
-// 		std::cout << c[i] << " ";
-// 	}
-// 	std::cout << std::endl;
-
-// 	c2 = c;
-// 	auto start = std::chrono::high_resolution_clock::now();
-// 	// mergeInsertionSort(c, 1);
-// 	// std::cout << std::endl;
-// 	mergeInsertionSort2(c2, 1);
-
-// 	auto end = std::chrono::high_resolution_clock::now();
-// 	std::chrono::duration<double, std::milli> duration = end - start;
-// 	std::cout << "Sorting took " << duration.count() << " milliseconds." << std::endl;
-// }
 
 int main()
 {
-	std::vector<int> c = {2, 4, 6, 8, 10, 12};
+	std::vector<int> c = {2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 1, 3, 5, 7, 9, 11, 13, 15, 17, 19};
 	for (size_t i = 0; i < c.size(); ++i)
 	{
 		std::cout << c[i] << " " ;
 	}
 	std::cout << std::endl;
 
-	std::cout << "binary search index: " << binarySearch(c, 7, 0, 2, 2) << std::endl;
+	mergeInsertionSort2(c, 1);
+
+	for (size_t i = 0; i < c.size(); ++i)
+	{
+		std::cout << c[i] << " " ;
+	}
+	std::cout << std::endl;
+
+	return 0;
+
 }
