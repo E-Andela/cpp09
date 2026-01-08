@@ -53,16 +53,15 @@ size_t boundedLowerBound(
 	return left;
 }
 
-void mergeInsertionSort(std::vector<int> &c)
+void mergeInsertionSort(std::vector<std::pair<int, int>> &pairs)
 {
-	if (c.size() <= 1)
+	if (pairs.size() <= 1)
 		return;
 
 	std::vector<std::pair<int, int>> pairs;
 	std::vector<int> larger;
 	std::vector<int> smaller;
 
-	// 1️⃣ Create pairs (bigger first)
 	for (size_t i = 0; i + 1 < c.size(); i += 2)
 	{
 		int a = c[i];
@@ -74,7 +73,6 @@ void mergeInsertionSort(std::vector<int> &c)
 		smaller.push_back(b);
 	}
 
-	// 2️⃣ Handle leftover element if odd
 	bool hasLeftover = (c.size() % 2 != 0);
 	int leftover = hasLeftover ? c.back() : 0;
 
@@ -82,38 +80,40 @@ void mergeInsertionSort(std::vector<int> &c)
 	{
 		std::cout << "Leftover element: " << leftover << std::endl;
 	}
-	// 3️⃣ Recursively sort the 'larger' half
-	mergeInsertionSort(larger);
 
-	// Merging logic would go here (not implemented in this snippet)
-	// 4️⃣ Insert smaller elements in Jacobsthal order
+	mergeInsertionSort(larger);
+	
+	for (int i: larger)
+	{
+		std::cout << i << " ";
+	}
+	std::cout << std::endl;
 	std::vector<int> order = calculateInsertionOrder(smaller.size());
 
-	for (int idx : order)
+	for (size_t i = 0; i < order.size(); ++i)
 	{
+		int idx = order[i] - 1;
 		int value = smaller[idx];
 		size_t pos = boundedLowerBound(larger, value, 0, idx);
 		larger.insert(larger.begin() + pos, value);
 	}
 
-	// 5️⃣ Insert leftover (unbounded)
 	if (hasLeftover)
 	{
 		size_t pos = boundedLowerBound(larger, leftover, 0, larger.size());
 		larger.insert(larger.begin() + pos, leftover);
 	}
 
-	// 6️⃣ Copy result back
 	c = larger;
 }
 
 int main()
 {
-	std::vector<int> c = {1, 4, 3, 9, 7, 8, 2, 6, 5, 0, 12, 11, 14, 13, 10};
+	std::vector<int> c = {4, 3, 1, 5, 2, 5, 6, 9, 7, 8};
 	mergeInsertionSort(c);
-	for (size_t i = 0; i < c.size(); ++i)
+	for (int i: c)
 	{
-		std::cout << c[i] << " " ;
+		std::cout << i << " " ;
 	}
 	std::cout << std::endl;
 	return 0;
