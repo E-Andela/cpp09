@@ -3,6 +3,12 @@
 #include <cstddef>
 #include <iostream>
 
+struct Node
+{
+	int value;
+	Node *smaller;
+};
+
 std::vector<int> calculateInsertionOrder(int inserts)
 {
 	std::vector<int> order;
@@ -53,9 +59,9 @@ size_t boundedLowerBound(
 	return left;
 }
 
-void mergeInsertionSort(std::vector<std::pair<int, int>> &pairs)
+void mergeInsertionSort(std::vector<int> &c)
 {
-	if (pairs.size() <= 1)
+	if (c.size() <= 1)
 		return;
 
 	std::vector<std::pair<int, int>> pairs;
@@ -83,33 +89,33 @@ void mergeInsertionSort(std::vector<std::pair<int, int>> &pairs)
 
 	mergeInsertionSort(larger);
 	
-	for (int i: larger)
-	{
-		std::cout << i << " ";
-	}
-	std::cout << std::endl;
-	std::vector<int> order = calculateInsertionOrder(smaller.size());
+	// for (int i: larger)
+	// {
+	// 	std::cout << i << " ";
+	// }
+	// std::cout << std::endl;
+	// std::vector<int> order = calculateInsertionOrder(smaller.size());
 
-	for (size_t i = 0; i < order.size(); ++i)
-	{
-		int idx = order[i] - 1;
-		int value = smaller[idx];
-		size_t pos = boundedLowerBound(larger, value, 0, idx);
-		larger.insert(larger.begin() + pos, value);
-	}
+	// for (size_t i = 0; i < order.size(); ++i)
+	// {
+	// 	int idx = order[i] - 1;
+	// 	int value = smaller[idx];
+	// 	size_t pos = boundedLowerBound(larger, value, 0, idx);
+	// 	larger.insert(larger.begin() + pos, value);
+	// }
 
-	if (hasLeftover)
-	{
-		size_t pos = boundedLowerBound(larger, leftover, 0, larger.size());
-		larger.insert(larger.begin() + pos, leftover);
-	}
+	// if (hasLeftover)
+	// {
+	// 	size_t pos = boundedLowerBound(larger, leftover, 0, larger.size());
+	// 	larger.insert(larger.begin() + pos, leftover);
+	// }
 
-	c = larger;
+	// c = larger;
 }
 
 int main()
 {
-	std::vector<int> c = {4, 3, 1, 5, 2, 5, 6, 9, 7, 8};
+	std::vector<int> c = {3, 2, 1, 8, 6, 7, 5, 4};
 	mergeInsertionSort(c);
 	for (int i: c)
 	{

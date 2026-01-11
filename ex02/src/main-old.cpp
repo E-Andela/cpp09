@@ -21,7 +21,7 @@ void mergeInsertionSort(std::vector<int> &c, int iteration)
         if (a < b)
             std::swap(a, b);
         pairs.push_back(std::make_pair(a, b));
-        larger.push_back(a);
+        larger.push_backa);
         smaller.push_back(b);
     }
 	std::cout << "Iteration " << iteration << ": larger half : ";
@@ -215,17 +215,13 @@ void mergeInsertionSort2(std::vector<int> &c, int iteration)
 	size_t amountOfPairs = c.size() / pairSize;
 	
 	std::cout << "Iteration: " << iteration << std::endl;
-	// std::cout << "Step size: " << stepSize << std::endl;
-	// std::cout << "Pair size: " << pairSize << std::endl;
-	// std::cout << "Pairs:	 " << amountOfPairs << std::endl;
 	std::cout << "c size: " << c.size() << std::endl;
-	
-	// std::cout << "Pairs: " ;
+	std::cout << "step size: " << stepSize << std::endl;
+
 	for (size_t i = 0; (i + stepSize) < c.size(); i += (stepSize * 2))
 	{
 		int a = c[i];
 		int b = c[i + stepSize];
-		// std::cout << "(" << a << ", " << b << "), " ;
 		size_t bIndex = (i + stepSize);
 		if (a < b)
 		{
@@ -235,22 +231,6 @@ void mergeInsertionSort2(std::vector<int> &c, int iteration)
 			}
 		}
 	}
-	
-	// std::cout << std::endl;
-
-	// for (size_t i = 0; i < c.size(); i+= pairSize)
-	// {
-	// 	std::cout << c[i] << " ";
-	// }
-
-	// std::cout << std::endl;
-
-	// for (size_t i = 0 + stepSize; i < c.size(); i+= pairSize)
-	// {
-	// 	std::cout << c[i] << " ";
-	// }
-
-	// std::cout << std::endl;
 
 	for (size_t i = 0; i < c.size(); i++)
 	{
@@ -259,18 +239,14 @@ void mergeInsertionSort2(std::vector<int> &c, int iteration)
 
 	std::cout << std::endl;
 
-	// if (amountOfPairs <= 1)
-	// 	return ;
-
 	if (amountOfPairs > 1)
 		mergeInsertionSort2(c, iteration + 1);
-
-	insertion(c, stepSize);
+	// insertion(c, stepSize);
 }
 
 int main()
 {
-	std::vector<int> c = {2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 1, 3, 5, 7, 9, 11, 13, 15, 17, 19};
+	std::vector<int> c = {3, 2, 1, 8, 6, 7, 5, 4};
 	for (size_t i = 0; i < c.size(); ++i)
 	{
 		std::cout << c[i] << " " ;
