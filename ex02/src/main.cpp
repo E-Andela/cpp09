@@ -3,124 +3,70 @@
 #include <cstddef>
 #include <iostream>
 
-struct Node
+int binarySearch(std::vector<int> &main, int target, int start, int last, int stepsize)
 {
-	int value;
-	Node *smaller;
-};
+	if (start >= last)
+        return start;
 
-std::vector<int> calculateInsertionOrder(int inserts)
+    int mid_block = start + (last - start) / 2;
+    int mid_index = mid_block * stepsize;
+
+    if (target > main[mid_index])
+        return binarySearch(main, target, mid_block + 1, last, stepsize);
+    else
+        return binarySearch(main, target, start, mid_block, stepsize);
+}
+
+void mergeInsertionSort(std::vector<int> &c, int iteration)
 {
-	std::vector<int> order;
-	order.reserve(inserts);
+	size_t stepSize = 1 << (iteration);
+	std::cout << "Iteration: " << iteration << ", step size: " << stepSize << std::endl;
 	
-	int j_prev = 1;
-	int j_curr = 3;
-
-	order.push_back(1);
-
-	while ((int)order.size() < inserts)
-	{
-		if (j_curr < inserts)
-			order.push_back(j_curr);
-		int i;
-		if (j_curr >= inserts)
-			i = inserts;
-		else
-			i = j_curr - 1;
-
-		while (i > j_prev)
-		{
-			order.push_back(i);
-			--i;
-		}
-
-		int j_next = j_prev * 2 + j_curr;
-		j_prev = j_curr;
-		j_curr = j_next;
-	}
-	return order;
-}
-
-size_t boundedLowerBound(
-	const std::vector<int> &v,
-	int value,
-	size_t left,
-	size_t right)
-{
-	while (left < right)
-	{
-		size_t mid = left + (right - left) / 2;
-		if (value < v[mid])
-			right = mid;
-		else
-			left = mid + 1;
-	}
-	return left;
-}
-
-void mergeInsertionSort(std::vector<int> &c)
-{
-	if (c.size() <= 1)
+	if (c.size() / stepSize <= 1)	// don't know if this is correct
 		return;
 
-	std::vector<std::pair<int, int>> pairs;
-	std::vector<int> larger;
-	std::vector<int> smaller;
-
-	for (size_t i = 0; i + 1 < c.size(); i += 2)
+	// 1️⃣ Create pairs (bigger first)
+	for (size_t i = 0; i + stepSize < c.size(); i += stepSize * 2)
 	{
 		int a = c[i];
-		int b = c[i + 1];
+		int b = c[i + stepSize];
 		if (a < b)
-			std::swap(a, b);
-		pairs.push_back(std::make_pair(a, b));
-		larger.push_back(a);
-		smaller.push_back(b);
+		{
+			for (size_t j = 0; j < stepSize; j++)
+			{
+				std::swap(c[i + j], c[i + j + stepSize]);
+			}
+		}
 	}
-
-	bool hasLeftover = (c.size() % 2 != 0);
-	int leftover = hasLeftover ? c.back() : 0;
-
-	if (hasLeftover)
+	for (int i: c)
 	{
-		std::cout << "Leftover element: " << leftover << std::endl;
+		std::cout << i << " ";
 	}
+	std::cout << std::endl;
+	// 2️⃣ Recursively sort the 'larger' half
+	mergeInsertionSort(c, iteration + 1);
 
-	mergeInsertionSort(larger);
-	
-	// for (int i: larger)
-	// {
-	// 	std::cout << i << " ";
-	// }
-	// std::cout << std::endl;
-	// std::vector<int> order = calculateInsertionOrder(smaller.size());
+	std::vector<int> large;
+	std::vector<int> small;
 
-	// for (size_t i = 0; i < order.size(); ++i)
-	// {
-	// 	int idx = order[i] - 1;
-	// 	int value = smaller[idx];
-	// 	size_t pos = boundedLowerBound(larger, value, 0, idx);
-	// 	larger.insert(larger.begin() + pos, value);
-	// }
+	for (size_t i = 0; i < c.size(); ++i)
+	{
+		if ((i / stepSize) % 2 == 0)
+			large.push_back(c[i]);
+	}
+	for (size_t i = 0; i < c.size(); ++i)
+	{
+		if ((i / stepSize) % 2 != 0)
+			small.push_back(c[i]);
+	}
+	//binary search for each element in small and insert into large
 
-	// if (hasLeftover)
-	// {
-	// 	size_t pos = boundedLowerBound(larger, leftover, 0, larger.size());
-	// 	larger.insert(larger.begin() + pos, leftover);
-	// }
+	//insert all elements from small into large
 
-	// c = larger;
 }
 
 int main()
 {
 	std::vector<int> c = {3, 2, 1, 8, 6, 7, 5, 4};
-	mergeInsertionSort(c);
-	for (int i: c)
-	{
-		std::cout << i << " " ;
-	}
-	std::cout << std::endl;
-	return 0;
+	mergeInsertionSort(c, 0);
 }
