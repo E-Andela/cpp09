@@ -21,7 +21,7 @@ void mergeInsertionSort(std::vector<int> &c, int iteration)
         if (a < b)
             std::swap(a, b);
         pairs.push_back(std::make_pair(a, b));
-        larger.push_backa);
+        larger.push_back(a);
         smaller.push_back(b);
     }
 	std::cout << "Iteration " << iteration << ": larger half : ";

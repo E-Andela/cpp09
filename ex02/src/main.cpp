@@ -80,13 +80,17 @@ void mergeInsertionSort(std::vector<int> &c, int iteration)
 	if (c.size() / stepSize <= 1)	// don't know if this is correct
 		return;
 
-	bool hasleftover = (c.size() % (stepSize * 2) != 0);
-	int leftover;
-	if (hasleftover)
+	// Check if we have an odd number of blocks (not elements)
+	size_t numBlocks = c.size() / stepSize;
+	bool hasLeftoverBlock = (numBlocks % 2 != 0);
+	std::vector<int> leftoverBlock;
+	
+	if (hasLeftoverBlock)
 	{
-		leftover = c.back();
-		std::cout << "Leftover element: " << leftover << std::endl;
-		c.pop_back();
+		std::cout << "Leftover block starting at index: " << c.size() - stepSize << std::endl;
+		// Save the last block (stepSize elements)
+		leftoverBlock.insert(leftoverBlock.end(), c.end() - stepSize, c.end());
+		c.erase(c.end() - stepSize, c.end());
 	}
 
 	// 1️⃣ Create pairs (bigger first)
@@ -201,11 +205,17 @@ void mergeInsertionSort(std::vector<int> &c, int iteration)
 	}
 	//binary search for each element in small and insert into large
 	std::cout << std::endl;
-	//insert all elements from small into large
-	if (hasleftover)
+	//insert leftover block if exists
+	if (hasLeftoverBlock)
 	{
-		auto insertpos = std::lower_bound(large.begin(), large.end(), leftover);
-		large.insert(insertpos, leftover);
+		// Find insertion point using the first element of the leftover block
+		int target = leftoverBlock[0];
+		int searchEnd = mergedStripped.size();
+		auto insertpos = std::lower_bound(mergedStripped.begin(), mergedStripped.begin() + searchEnd, target);
+		int insertIndex = std::distance(mergedStripped.begin(), insertpos);
+		
+		std::cout << "Inserting leftover block at index: " << insertIndex * stepSize << std::endl;
+		large.insert(large.begin() + insertIndex * stepSize, leftoverBlock.begin(), leftoverBlock.end());
 	}
 	c = large;
 
@@ -214,13 +224,36 @@ void mergeInsertionSort(std::vector<int> &c, int iteration)
 
 int main()
 {
-	std::vector<int> c = {3, 2, 1, 8, 6, 7, 5, 4, 9, 10};
+	// Test with 5 elements
+	std::vector<int> c = {5, 4, 3, 2, 1};
 	std::vector<int> order = calculateInsertionOrder(4);
 	mergeInsertionSort(c, 0);
+	std::cout << "\nFinal result (5 elements): ";
 	for (int i: c)
 	{
 		std::cout << i << " ";
 	}
+	std::cout << std::endl;
+
+	// Test with 7 elements
+	c = {7, 6, 5, 4, 3, 2, 1};
+	mergeInsertionSort(c, 0);
+	std::cout << "\nFinal result (7 elements): ";
+	for (int i: c)
+	{
+		std::cout << i << " ";
+	}
+	std::cout << std::endl;
+
+	// Test with 13 elements
+	c = {13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1};
+	mergeInsertionSort(c, 0);
+	std::cout << "\nFinal result (13 elements): ";
+	for (int i: c)
+	{
+		std::cout << i << " ";
+	}
+	std::cout << std::endl;
 
 	// int stepSize = 4;
 	// std::vector<int> large = {8, 1, 3, 2};
