@@ -1,6 +1,6 @@
 CC = c++
 
-FLAGS = -Wall -Wextra -Werror -g
+FLAGS = -Wall -Wextra -Werror -g -I./inc
 
 TARGET = PmergeMe
 SRC_DIR = src
